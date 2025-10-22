@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [ python_private ]
+  pull_request:
+    branches: [ python_private ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+
+    - name: Cache Conda environment
+      uses: actions/cache@v4
+      with:
+        path: /usr/share/miniconda3/envs/python-exercises
+        key: conda-${{ runner.os }}-${{ hashFiles('environment.yml') }}
+        restore-keys: |
+          conda-${{ runner.os }}-
+
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        miniconda-version: 'latest'
+        channels: conda-forge
+        environment-file: environment.yml
+        activate-environment: python-exercises
+        auto-activate-base: false
+        use-only-tar-bz2: true
+
+    - name: Set up Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+      with:
+        version: 1.4.550
+
+    - name: Run tests for intro topic
+      run: conda run -n python-exercises pytest course/intro/tests | fold -s -w 72 | tee intro_tests_output.txt
+           echo $? > intro_status.txt
+
+    - name: Run tests for all topics
+      run: conda run -n python-exercises pytest course |  fold -s -w 72 | tee all_tests_output.txt
+           echo $? > tests_status.txt
+
+    - name: Run flake8 linter
+      run: |
+        echo "Running flake8..." | tee flake8_output.txt
+        conda run -n python-exercises flake8 course --exit-zero | fold -s -w 72 | tee -a flake8_output.txt
+        echo $? > lint_status.txt
+        echo "flake8 completed at $(date)" | tee -a flake8_output.txt
+        
+    - name: Run doit pipeline
+      run: conda run -n python-exercises doit -f dodo_unsupervised.py | fold -s -w 72 | tee -a doit_output.txt
+
+    - name: Generate PDF report
+      run: |
+        pip install pymupdf
+        python generate_report.py
+
+    - name: List files in workspace
+      run: ls -R
+        
+    - name: Upload CI report PDF
+      uses: actions/upload-artifact@v4
+      with:
+        name: actions_report
+        path: | 
+          ci_report.pdf
+          vignettes/unsupervised/unsupervised_classification.html
+          
+
+    - name: Evaluate results
+      run: |
+        intro_status=$(cat intro_status.txt)
+        all_status=$(cat tests_status.txt)
+        lint_status=$(cat lint_status.txt)
+        if [ "$intro_status" -ne 0 ] || [ "$all_status" -ne 0 ] || [ "$lint_status" -ne 0 ]; then
+          echo "One or more checks failed."
+          exit 1
+        else
+          echo "All checks passed."
+        fi
+

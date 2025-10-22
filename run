@@ -1,0 +1,31 @@
+
+#!/bin/bash
+
+function run_ict() {
+    echo "Running tests for Introduction to Python"
+    pytest course/intro/tests
+    echo "Running linter on Introduction to Python"
+    flake8 course/intro
+}
+
+function run_cwk() {
+    echo "Running tests for coursework tasks"
+    pytest course/supervised_classification/tests
+    echo "Running linter on coursework tasks"
+    flake8 course/supervised_classification
+    flake8 course/unsupervised_classification
+}
+
+case "$1" in
+    ict)
+        run_ict
+        ;;
+    cwk)
+        run_cwk
+        ;;
+    *)
+        echo "Usage: $0 {ict|cwk}"
+        exit 1
+        ;;
+
+esac
