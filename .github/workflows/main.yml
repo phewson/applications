@@ -59,7 +59,7 @@ jobs:
       - name: Run doit pipeline
         run: | 
           conda run -n python-exercises doit -f dodo_unsupervised.py | fold -s -w 72 | tee -a doit_output.txt
-          echo "${PIPESTATUS[0]}" > pipeline.txt
+          echo "${PIPESTATUS[0]}" > pipeline_status.txt
 
       - name: Generate PDF report
         run: |
@@ -83,13 +83,13 @@ jobs:
           intro_status=$(cat intro_status.txt)
           all_status=$(cat tests_status.txt)
           lint_status=$(cat lint_status.txt)
-          pipe_status=$(cat pipeline_status.txt)
+          pipeline_status=$(cat pipeline_status.txt)
           if [ "$intro_status" -ne 0 ] || [ "$all_status" -ne 0 ] || [ "$lint_status" -ne 0 ] || [ "$pipe_status" -ne 0 ]; then
             echo "One or more checks failed."
             echo "Intro tests: $intro_status"
             echo "All tests: $all_status"
             echo "Lint: $lint_status"
-            echo "Pipeline execution": $pipe_status
+            echo "Pipeline execution": $pipeline_status
             exit 1
           else
             echo "All checks passed."
