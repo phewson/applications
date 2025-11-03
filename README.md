@@ -1,6 +1,6 @@
 # mthm503
 
-![CI](https://github.com/phewson/mthm503/actions/workflows/main.yml/badge.svg)
+![CI](https://github.com/<YOUR USER NAME>/<YOUR REPOSITORY NAME>/actions/workflows/main.yml/badge.svg)
 
 This is a template for course MTHM503 "Applications of Data Science and Statistics".  You should fork this repository and use it for your work on this module
 
@@ -8,47 +8,30 @@ Note: in a professional setting, a DevOps engineer (or team of engineers) would 
 
 ## Setting up for the first time
 
-I have tested the set up on a University Virtual Machine, a University Laptop, as well as my own Debian machines. It does work, but occasionally Windows can make things difficult.   If you find that sourcing `init.R` doesn't leave you with a working set up, here are some things you can try:
+I have tested the set up on a University Virtual Machine, a University Laptop, as well as my own Debian machines.  I have checked it on University Lab Machines. It does work, but occasionally Windows can make things difficult.  You really do need to follow all the instructions carefully.  The most important of these is: **Execute the run file in the Anaconda prompt**.
 
-1. Make sure you are using R version 4.4.0. This is the version on the University machines and hence is the version I have tested against.  If you install R-4.4.0, when you open RStudio you can select Tools -> Global Options and select the [Change] button and navigate to wherever you installed version 4.4.0
-2. You can set `options(pkgType = "binary")` by typing in the R console. This should be set for you in recent versions of the `init.R` script
-3. You could try installing packages from different repos, by typing something like `options(repos = "https://cloud.r-project.org/")`
-4. You also could go back to the steps where you set up the project and make sure you install to a local file that isn't under the control of OneDrive.
-5. When sourcing, use the drop down button to the right of [Source] and select "Source as Background Job" (if this fixes anything it is really only helping because you are working in some OneDrive regulated space)
-
-Hopefully, you can get yourself into a workable state, and entering `renv::restore()` happily tells you everything has been installed.
+- Make sure you first have a GitHub account, and secondly, register this as a student account with GitHub.  More detailed information is given in ELE.
+- Open Rstudio and create a new project under version control, using the GitHub repository you have just set up. There are slightly different instructions if you are doing this on a virtual machine.
+- This is the tricky part. You need to move over to Anaconda Prompt and point the prompt at the repo you have just downloaded.   `cd` changes the directory, but more specific advice is not available as it all depends where you have put the local copy of your repository
+- With Anaconda prompt in your repository folder you can execute `conda env create -f environment.yml`.  This will set up a conda environment on your working PC and will take a few moments. You then need to activate it by issuing the command  `activate python-exercises`
+- Now, you have to restart your Rstudio.  If you can find the `python-exercises` conda environment all is good. If not, you may have to run the `start_repl.R` script which seems to magically set up some paths inside Rstudio. If you need to do this, open the `start_repl.R` script in Rstudio and hit the button for `source script`.
+- The most important thing is, you need to do this in the first week of the course. Not much else will run if we don't get this set up right. You won't be able to submit coursework.
 
 ## Developing reproducible pipelines
 
-Therefore, you may find yourself working as follows:
+The basic method of working is to write functions that pass unit tests.  As you progress, and especially if you want a higher mark, you will want to write your own unit tests and extend the pipelines.  We will look at that in due course.  In the meantime, do note:
 
-1. Develop a script to perform some analysis task.
-2. When you are happy with it, wrap it in a function and save it in the `functions.R` file.
-3. You call this function from the `_targets.R` file in the form 
-  `tar_target(NAME OF THE OUTPUT, FUNCTION CALL(DATA AND OTHER ARGUMENTS))`
-4. Run `targets::tar_make()` in the parent folder. 
-5. You might consider adding a unit test for the function you wrote. It only needs to test for example that a data summary function returns a data frame to be helpful in understanding where you might have errors.
+1. The `REPL` (you can launch this anytime you want by sourcing the `start_repl.R` script) is an interactive python "shell". You can type commands in there e.g. `2 + 2` and view the result.  
+2. You can also write pieces of code in a script file and `run` them in Python by (a) highlighting a region and clicking Ctrl + Enter () or (b) just pressing Ctrl + Enter to submit the cursor line.  If you don't have a python REPL open at this point, Rstudio will open one for you.
+3. You can therefore "experiment" with pieces of code, see how they work line by line and so on. When you are ready, you can wrap these into a function.
+4. The `doit` pipeline tool writes all intermediate stages out as files. You can therefore read in any of these as you see fit and work with it interactively, until you are ready to write a function.
 
-## The run file
 
-The run file can be executed from the R Terminal using `./run` although sometimes windows might make you type `bash run` instead.  It is very similar to the script on GitHub actions. Locally, it will lint your files. Linting means performing a static code analysis. Occasionally this finds important errors in your code, but usually it just worries minor code formatting issues. Sometimes in the R ecosystem it's hard to keep it happy and you can type `# nolint` at the end of a line and the linter will ignore that line.   It also runs any unit tests; note that instead of loading data from a database server, there is an sqlite database with a few rows of mock data which is intended to allow some functions to be tested.  Again, a little unit testing can be a useful way of making sure your code does what you think it does.
 
 ## Formative feedback
 
-To submit your work for formative feedback, you'll use a Pull Request (PR). This allows you to share your code and analysis while giving instructors visibility for feedback and review.
+To submit your work for formative feedback, you'll use a Pull Request (PR) on GitHub. This allows you to share your code and analysis while giving instructors visibility for feedback and review.
 
-### Step-by-Step Guide
-
-- You should have forked this repository. Click the "Fork" button at the top right of the page. This creates your own copy of the teaching repo.
-- Work in your fork Make your changes (code, report, etc.) in your own forked repo. You can create branches if you’d like, but it’s not required.
-- Create a Pull Request against this repository Once you’re ready:
-
-  1. Go to your forked repo.
-  2. Click the “Pull Request” tab → “New Pull Request”.
-  3. Select your branch on the left, and the main branch of this repo
-  4. Pick the appropriate template from the dropdown if available (e.g. classification, regression, etc.).
-  5. Use the checklist and prompts to reflect on your work. This helps us give feedback and ensures key components are included.
-  6. Submit the PR Once submitted, your instructors will be notified.
 
 ### Notes
 
@@ -59,9 +42,9 @@ To submit your work for formative feedback, you'll use a Pull Request (PR). This
 - If you’re unsure which template to use, ask or consult the assignment brief.
 
 ```
-        +--------------------+
-        | 1. Fork the Repo   |  ←-- Student clicks "Fork"
-        +--------------------+
+        +------------------------+
+        | 1. Initiate the Repo   |  ←-- Student clicks "Fork"
+        +------------------------+
                   |
                   v
         +--------------------+

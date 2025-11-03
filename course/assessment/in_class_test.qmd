@@ -8,6 +8,8 @@ format:
     embed-resources: true
 ---
 
+*To be completed 19th November 2025*
+
 # In-Class Test Brief: Python, `doit`, and GitHub Actions
 
 ## Overview
@@ -20,8 +22,8 @@ Your work will be assessed automatically using **GitHub Actions**, so it is esse
 
 By completing this test, you will show that you can:
 
-- Set up and use a GitHub repository based on the template provided.
-- Configure GitHub Actions to run unit tests and linters (PEP8 compliance).
+- Set up and use a GitHub repository based on the template provided in GitHub Classroom.
+- Configure GitHub Actions to run unit tests and linters and build a simple pipeline.
 - Write Python functions to solve basic programming challenges.
 - Build a reproducible data pipeline using the `doit` package.
 - Compile a simple report using `quarto`.
@@ -30,13 +32,13 @@ By completing this test, you will show that you can:
 
 You **must** have completed the following setup using the module instructions:
 
-- Installed Python and Conda.
-- Created a GitHub account and registered your student status so that you get features such as compute time for GitHub actions
-- Cloned the GitHub template repository.
-- Configured Rstudio to use this GitHub repository so that you can make changes locally and them push them to the repository.
-- Configured GitHub Actions to run tests and linting.
-- Verified that your local environment works using the `./run` script.
-- Ensured you can find the zip file artefact created by GitHub actions (this will be recreated every time you commit code to your repository)
+- Installed `Python` and `Conda`.
+- Created a `GitHub` account and registered your student status so that you get features such as compute time for `GitHub` actions
+- Cloned the `GitHub` template repository for the module.
+- Configured `Rstudio` to use this `GitHub` repository so that you can make changes locally and them push them to the repository.
+- Configured `GitHub` Actions to run tests and linting.
+- Verified that your local environment works using the `./run check` script (On windows, under Anaconda Prompt this should be something like `"c:\Program Files\Git\bin\bash.exe" run check`
+- Ensured you can find the zip file artifact created by GitHub actions (this will be recreated every time you commit code to your repository)
 
 You should use computer tutorials and drop-in sessions to get help with this setup. **Once the test opens, no further setup support can be provided.**
 
@@ -44,7 +46,7 @@ You should use computer tutorials and drop-in sessions to get help with this set
 
 ### 1. Python Programming Skills
 
-You will be given a list of **ten functions** to complete. Each function will have a doc string describing the task. For example:
+You will be given a python file `python_exercises.py` containing **ten functions** to complete. Each function will have a doc string describing the task. For example:
 
 ```python
 def hello():
@@ -67,7 +69,7 @@ def hello():
 - String handling
 - Simple numerical computations
 
-Use the `./run` script to run unit tests locally. Initially, the tests will fail. Your objective is to make them pass.
+Use the `./run ict` (or Anaconda Prompt `"c:\Program Files\Git\bin\bash.exe" run ict`) script to run unit tests locally. Initially, the tests will fail. Your objective is to make them pass.
 
 ### 2. Reproducible Pipeline with `doit`
 
@@ -75,9 +77,9 @@ You will complete a simple `doit` pipeline that includes:
 
 - Reading and processing data
 - Generating summary statistics or visualisations
-- Compiling a pre-populated `quarto` report
+- Pre-populating `quarto` report. You have to open the file `vignettes/intro/pipeline.qmd` in Rstudio and render it once you have all the pipeline working.  GitHub actions will do this for you for the assessment, but it is good to check locally.
 
-The pipeline will be partially written for you. Your task is to complete the missing parts and ensure it runs end-to-end.
+The pipeline will be written for you. Your task is to complete the missing parts and ensure it runs end-to-end.  You need to complete functions in a file `pipeline_functions.py` which will make this pipeline run. Again, these functions have unit tests and you can use `./run ict` (or Anaconda Prompt `"c:\Program Files\Git\bin\bash.exe" run ict`) script to run unit tests locally
 
 ### 3. GitHub Actions Assessment
 
@@ -86,11 +88,22 @@ Your final submission will be assessed via **GitHub Actions**. This means:
 - Your code must pass all unit tests.
 - Your code must comply with PEP8 linting standards.
 - Your pipeline must run successfully and produce the expected outputs.
-- Under Actions, you will be given an artefact in the form of a zip file.  This zip file contains a print out of the results of running the unit tests and linter on your code as well as details of the action. It will also contain your source files.  You can also see that the file reports the ShaSum.  We will check that the shasum of the submitted file matches that on the corresponding action.
+- Under `GitHub` Actions, you will be given an artifact in the form of a zip file.  This zip file contains a print out of the results of running the unit tests and `flake8` linter on your code as well as details of the action. It will also contain your source files.  You can also see that the file reports the `shasum`.  We will check that the `shasum` of the submitted file matches that on the corresponding action.
 
 ## Submission
 
-- Your GitHub repository must be public (or shared with the instructor).
+- Your `GitHub` repository must shared with the Module Convener (`phewson`).
 - All work must be committed and pushed before the deadline.
-- The GitHub Actions workflow must complete successfully.  Remember this will take a few minutes
-- You are to submit the zip file produced by GitHub actions to ELE before the test deadline. This is the only aspect of this work that allows grading to take place. Partial grading for previous steps will not be awarded. Only the submitted GitHub actions produced zip file can be graded.
+- The `GitHub` Actions workflow must complete successfully.  Remember this will take a few minutes
+- You are to submit the zip file produced by GitHub actions to ELE before the test deadline. This is the only aspect of this work that allows grading to take place. Partial grading for previous steps will not be awarded. Only the submitted `GitHub` actions produced zip file can be graded.
+
+
+
+### Marking Criteria (Total: 20 marks)
+
+| Criterion                        | Description                                                                 | Marks |
+|----------------------------------|-----------------------------------------------------------------------------|-------|
+| **GitHub Actions Setup**         | Repository correctly configured, shared with the module convener and triggers GitHub Actions and produce an artifact. | 5     |
+| **Unit Test Success**            | All provided unit tests pass successfully under GitHub Actions.            | 5     |
+| **Linting Compliance (flake8)**  | Code passes `flake8` checks with no errors or warnings.                    | 5     |
+| **Pipeline Execution**           | `doit` pipeline runs end-to-end and produces expected outputs.             | 5     |

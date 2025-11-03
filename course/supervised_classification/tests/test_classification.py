@@ -23,12 +23,13 @@ def test_predict_creates_csv(tmp_path):
 
     # Output path
     y_pred_path = tmp_path / "y_pred.csv"
+    y_pred_prob_path = tmp_path / "y_pred_prob.csv"
 
     # Run prediction
-    predict(model_path, X_test_path, y_pred_path)
+    predict(model_path, X_test_path, y_pred_path, y_pred_prob_path)
 
     # Assertions
     assert y_pred_path.exists()
     df = pd.read_csv(y_pred_path)
-    assert 'predicted_tenure' in df.columns
+    assert 'predicted_built_age' in df.columns
     assert len(df) == len(X_test)

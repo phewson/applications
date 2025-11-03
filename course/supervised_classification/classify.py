@@ -6,7 +6,7 @@ from course.utils import find_project_root
 
 def fit_classifier(X_train_path, y_train_path, model_path, classifier):
     X_train = pd.read_csv(X_train_path)
-    y_train = pd.read_csv(y_train_path)['tenure_type']
+    y_train = pd.read_csv(y_train_path)['built_age']
     classifier.fit(X_train, y_train)
     joblib.dump(classifier, model_path)
 

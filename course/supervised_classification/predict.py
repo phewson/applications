@@ -7,7 +7,7 @@ def predict(model_path, X_test_path, y_pred_path):
     model = joblib.load(model_path)
     X_test = pd.read_csv(X_test_path)
     """Form an object y_pred containing a list of your classifer predictions"""
-    y_pred_series = pd.Series(y_pred, name='predicted_tenure')
+    y_pred_series = pd.Series(y_pred, name='predicted_built_age')
     y_pred_series.to_csv(y_pred_path, index=False)
 
 

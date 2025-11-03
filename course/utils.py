@@ -3,6 +3,41 @@ from dotenv import load_dotenv
 import os
 import psycopg2
 import pandas as pd
+import sys
+import textwrap
+from doit.exceptions import TaskFailed
+
+
+def warn_if_in_rstudio():
+    """Detect if running under RStudio/reticulate and print a warning."""
+    # reticulate embeds Python in-process and sets these environment variables
+    in_rstudio = any(
+        "RSTUDIO" in k or "RETICULATE" in k for k in os.environ.keys()
+    )
+
+    if in_rstudio:
+        msg = textwrap.dedent(f"""
+        WARNING: This script appears to be running inside RStudio (reticulate).
+        RStudio embeds Python in the R process, which can cause segfaults with
+        libraries like psycopg2 and NumPy.
+
+        Please re-run this script from a clean Anaconda prompt instead:
+          conda activate python-exercises
+          python {os.path.basename(sys.argv[0])}
+        """)
+        print(msg, file=sys.stderr)
+
+
+def check_input_file(path, hint=None):
+    """Return a TaskFailed object (not raise it) if the input file is missing."""
+    if not os.path.exists(path):
+        msg = f"Missing required input file: {path}"
+        if hint:
+            msg += f"\n Hint: {hint}"
+        # Return TaskFailed so doit interprets it as a controlled failure
+        print(msg, file=sys.stderr, flush=True)
+        return TaskFailed(msg)
+    return True
 
 
 def load_pg_data(query):

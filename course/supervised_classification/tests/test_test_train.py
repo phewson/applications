@@ -6,7 +6,7 @@ from course.supervised_classification.split_test_train import split_data
 def test_test_and_train_creates_files(tmp_path):
     # Create dummy dataset
     df = pd.DataFrame({
-        'tenure_type': ['Owner occupied', 'Rented', 'Owner occupied', 'Rented'],
+        'built_age': ['Owner occupied', 'Rented', 'Owner occupied', 'Rented'],
         'feature1': [1, 2, 3, 4],
         'feature2': [5, 6, 7, 8]
     })

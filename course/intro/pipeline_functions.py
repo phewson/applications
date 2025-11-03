@@ -6,25 +6,28 @@ import plotly.express as px
 
 
 def plot_scatter(df, x_name, y_name):
-    """Generate scatterplot of two columns in a pandas data frame df. 
-    The columns to be plotted are x_name and y_name"""
+    """Given a dataframe containing numeric columns specified by x_name and y_name
+    return a plotly express scatterplot"""
     return 0
 
 
 def calculate_correlation(df, x1, x2):
-    """Estimate the pearson correlation coefficient between variable x1 and x2
-    contained in data frame df"""
+    """Given a dataframe containing numeric columns specified by x_name and y_name
+    return two objects (numbers), the first is the pearson correlation coefficient, the second the significance
+    this estimate"""
     return 0
 
 
 def fit_regression(df, x_name, y_name):
-    """Fit a regression model of the y_name variable on the x_name variable
-    contained in data frame df"""
+    """Given a dataframe containing numeric columns specified by x_name and y_name
+    return the stats models OLS fit of a regression model of y on x"""
     return 0
 
 
 def filter_data(df, year):
-    """Select all rows with values smaller than year"""
+    """Given a dataframe of various rows including a column 'Year' and an integer year
+    return a dataframe containing only those rows where the value in this column is less 
+    than the value of the supplied year"""
     return 0
 
 

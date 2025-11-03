@@ -1,84 +1,82 @@
-import pandas as pd
-import plotly.express as px
-import plotly.io as pio
 from pathlib import Path
-from sklearn.preprocessing import StandardScaler
-from course.unsupervised_classification.visual_eda import (
-  summary_stats, generate_raw_boxplot, generate_scaled_boxplot, generate_scatterplot)
+from doit.tools import config_changed
+from course.utils import load_pg_data
+from course.unsupervised_classification.eda import plot_scatter
+from course.unsupervised_classification.tree import hierarchical_groups, hcluster_analysis
+from course.unsupervised_classification.kmeans import kmeans
 
 
-def task_check_cache():
-    def check_cache():
+def task_check_cache_data():
+    def check_cache_data():
         """Check cache folder exists"""
         models_path = Path("data_cache/models")
         models_path.mkdir(parents=True, exist_ok=True)
     return {
-      'actions': [check_cache]
+      'actions': [check_cache_data]
     }
 
 
-def task_check_vignettes():
-    def check_vignettes():
+def task_check_cache_results():
+    def check_cache_results():
         """Check cache folder exists"""
-        vignettes_path = Path("vignettes/unsupervised/cache")
-        vignettes_path.mkdir(parents=True, exist_ok=True)
+        models_path = Path("data_cache/vignettes/unsupervised_classification")
+        models_path.mkdir(parents=True, exist_ok=True)
     return {
-      'actions': [check_vignettes]
+      'actions': [check_cache_results]
     }
 
 
-def task_load_data():
-    def load_data():
-        df = pd.read_csv('data/olive_oil.csv')
-        df_reduced  = df.iloc[:, 3:]
-        df_reduced.to_csv('data_cache/unsupervised.csv', index = False)
+def task_crash_summaries():
+    def crash_summaries():
+        with open('sql/la_collision.sql', 'r') as file:
+            QUERY = file.read()
+        df = load_pg_data(QUERY)
+        df.set_index("lad_ons", inplace=True)
+        df[df.columns[1:7]] = df[df.columns[1:7]].astype(float)
+        df[df.columns[0]] = df[df.columns[0]].astype(float)
+        df.iloc[:, 1:7] = df.iloc[:, 1:7].div(df.iloc[:, 0], axis=0)
+        df.to_csv('data_cache/la_collision.csv', index=False)
     return {
-        'actions': [load_data],
-        'file_dep': ['data/olive_oil.csv'],
-        'targets': ['data_cache/unsupervised.csv'],
+        'actions': [crash_summaries],
+        'file_dep': ['sql/la_collision.sql'],
+        'targets': ['data_cache/la_collision.csv'],
+        'uptodate': [config_changed({'sql_file': open('sql/la_collision.sql').read()})],
     }
 
 
-def task_summary_stats():
+def task_eda():
     return {
-        'actions': [summary_stats],
-        'file_dep': ['data_cache/unsupervised.csv', 'course/unsupervised_classification/visual_eda.py'],
-        'targets': ['vignettes/unsupervised/cache/olive_oil_summary.html'],
+      'actions': [plot_scatter],
+      'file_dep': ['data_cache/la_collision.csv',
+                   'course/unsupervised_classification/eda.py'],
+      'targets': ['data_cache/vignettes/supervised_classification/scatterplot.html']
     }
 
 
-def task_plot_raw_boxplot():
+def task_hcluster_analysis():
     return {
-        'file_dep': ['data_cache/unsupervised.csv', 'course/unsupervised_classification/visual_eda.py'],
-        'targets': ['vignettes/unsupervised/cache/raw_boxplot.html'],
-        'actions': [generate_raw_boxplot],
-        'clean': True,
+      'actions': [hcluster_analysis],
+      'file_dep': ['data_cache/la_collision.csv',
+                   'course/unsupervised_classification/tree.py'],
+      'targets': ['data_cache/vignettes/supervised_classification/dendrogram.html']
     }
 
 
-def task_plot_scaled_boxplot():
+def task_hierarchical_groups():
     return {
-        'file_dep': ['data_cache/unsupervised.csv', 'course/unsupervised_classification/visual_eda.py'],
-        'targets': ['vignettes/unsupervised/cache/scaled_boxplot.html'],
-        'actions': [generate_scaled_boxplot],
-        'clean': True,
+      'actions': [lambda: hierarchical_groups(20)],
+      'file_dep': ['data_cache/la_collision.csv',
+                   'course/unsupervised_classification/tree.py'],
+      'targets': ['data_cache/vignettes/supervised_classification/hscatter.html']
     }
 
 
-def task_plot_scatterplot():
+def task_kmeans():
     return {
-        'file_dep': ['data_cache/unsupervised.csv', 'course/unsupervised_classification/visual_eda.py'],
-        'targets': ['vignettes/unsupervised/cache/scatterplot.html'],
-        'actions': [generate_scatterplot],
-        'clean': True,
+      'actions': [lambda: kmeans(4)],
+      'file_dep': ['data_cache/la_collision.csv',
+                   'course/unsupervised_classification/tree.py'],
+      'targets': ['data_cache/vignettes/supervised_classification/kscatter.html',
+                  'data_cache/vignettes/supervised_classification/kcentroids1.html'
+                  'data_cache/vignettes/supervised_classification/kcentroids2.html']
     }
-
-
-def task_render_quarto():
-    return {
-        'file_dep': ['vignettes/unsupervised/unsupervised_classification.qmd'],
-        'targets': ['vignettes/unsupervised/unsupervised_classification.html'],
-        'actions': ['quarto render vignettes/unsupervised/unsupervised_classification.qmd'],
-        'clean': True,
-    }
-
