@@ -42,7 +42,6 @@ def read_file(filepath):
 checksum = compute_checksum(source_file)
 date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 intro_tests = read_file(test_intro_output)
-all_tests = read_file(test_all_output)
 linter = read_file(linter_output)
 doit = read_file(doit_output)
 

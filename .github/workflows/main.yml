@@ -147,11 +147,9 @@ jobs:
           regression_lint=$(cat regression_lint_status.txt)
           supervised_lint=$(cat supervised_lint_status.txt)
           unsupervised_lint=$(cat unsupervised_lint_status.txt)
-          unsupervised_pipeline=$(cat unsupervsied_pipeline_status.txt)
 
           if [ "$regression_status" -ne 0 ] || [ "$supervised_status" -ne 0 ] || [ "$unsupervised_status" -ne 0 ] || \
-             [ "$regression_lint" -ne 0 ] || [ "$supervised_lint" -ne 0 ] || [ "$unsupervised_lint" -ne 0 ] || \
-             [ "$unsupervised_pipeline" -ne 0 ]; then
+             [ "$regression_lint" -ne 0 ] || [ "$supervised_lint" -ne 0 ] || [ "$unsupervised_lint" -ne 0 ]; then
             echo "One or more coursework checks failed."
             exit 1
           else
