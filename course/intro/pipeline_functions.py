@@ -13,8 +13,8 @@ def plot_scatter(df, x_name, y_name):
 
 def calculate_correlation(df, x1, x2):
     """Given a dataframe containing numeric columns specified by x_name and y_name
-    return two objects (numbers), the first is the pearson correlation coefficient, the second the significance
-    this estimate"""
+    return two objects (numbers), the first is the pearson correlation coefficient, the second 
+    the significance of this estimate"""
     return 0
 
 
@@ -26,7 +26,7 @@ def fit_regression(df, x_name, y_name):
 
 def filter_data(df, year):
     """Given a dataframe of various rows including a column 'Year' and an integer year
-    return a dataframe containing only those rows where the value in this column is less 
+    return a dataframe containing only those rows where the value in this column is less
     than the value of the supplied year"""
     return 0
 

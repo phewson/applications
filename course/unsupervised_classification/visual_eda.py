@@ -1,6 +1,7 @@
 import pandas as pd
 import plotly.express as px
 from sklearn.preprocessing import StandardScaler
+from course.unsupervised_classification.eda import _scatter
 
 
 def summary_stats():
@@ -29,7 +30,5 @@ def generate_scaled_boxplot():
 
 def generate_scatterplot():
     df = pd.read_csv("data_cache/unsupervised.csv")
-    fig = px.scatter_matrix(df, dimensions=df.select_dtypes(include='number').columns,
-                            title="Scatter Matrix of Continuous Variables")
-    fig.update_traces(diagonal_visible=False)
+    fig = _scatter(df, title="Scatter Matrix of Continuous Variables")
     fig.write_html("vignettes/unsupervised/cache/scatterplot.html")
